@@ -1,16 +1,28 @@
+// --- 1. PERMISSÃO E CARREGAMENTO INICIAL (Único window.onload) ---
 window.onload = () => {
+    // Pede permissão de notificação se não foi concedida
     if (Notification.permission !== 'granted') {
         Notification.requestPermission();
     }
 
+    // Carrega as tarefas salvas do localStorage
+    const tarefasSalvas = JSON.parse(localStorage.getItem('minhasTarefas'));
+    if (tarefasSalvas) {
+        tarefasSalvas.forEach(tarefa => {
+            adicionarTarefa(tarefa.texto, tarefa.concluida);
+        });
+    }
+};
+
+// --- 2. SELEÇÃO DE ELEMENTOS ---
 const listcontainer = document.getElementById("list-container");
 const modal = document.getElementById("modal-fundo");
-const btnAdd = document.getElementById('btnAdd');
-const btnSalvar = document.getElementById('btn-adicionar');
+// Ajustado para 'add-list-btn' (confirme se no seu index.html o ID é esse)
+const btnAdd = document.getElementById('add-list-btn') || document.getElementById('btnAdd');
+const btnSalvar = document.getElementById('btn-salvar');
 const btnCancelar = document.getElementById('btn-cancelar');
 
-
-// --- 1. FUNÇÕES DE PERSISTÊNCIA (Agora salvam o estado de conclusão) ---
+// --- 3. FUNÇÕES DE PERSISTÊNCIA ---
 function salvarTarefas() {
     const tarefas = [];
     document.querySelectorAll('#list-container li').forEach(li => {
@@ -23,51 +35,57 @@ function salvarTarefas() {
     localStorage.setItem('minhasTarefas', JSON.stringify(tarefas));
 }
 
-window.onload = () => {
-    const tarefasSalvas = JSON.parse(localStorage.getItem('minhasTarefas'));
-    if (tarefasSalvas) {
-        tarefasSalvas.forEach(tarefa => {
-            adicionarTarefa(tarefa.texto, tarefa.concluida);
-        });
-    }
-};
-
-// --- 2. CONTROLE DO MODAL ---
-if (btnAdd){btnAdd.addEventListener('click', (e) => {
+// --- 4. CONTROLE DO MODAL ---
+if (btnAdd && modal) {
+    btnAdd.addEventListener('click', (e) => {
         e.preventDefault();
         modal.style.display = 'flex';
-})};
+    });
     
     btnAdd.addEventListener('touchend', (e) => {
         e.preventDefault();
         modal.style.display = 'flex';
     });
-btnCancelar.addEventListener('click', () => modal.style.display = 'none');
+}
 
-btnSalvar.addEventListener('click', () => {
-    const data = document.getElementById('data').value;
-    const hora = document.getElementById('hora').value;
-    const titulo = document.getElementById('titulo').value;
-    if (titulo) {
-        adicionarTarefa(titulo, false);
-        agendarNotificacao(titulo, data, hora);
-        salvarTarefas();
+if (btnCancelar && modal) {
+    btnCancelar.addEventListener('click', () => {
         modal.style.display = 'none';
-        document.getElementById('titulo').value = '';
-    }
-});
+    });
+}
 
-// --- 3. FÁBRICA DE TAREFAS ---
+if (btnSalvar && modal) {
+    btnSalvar.addEventListener('click', () => {
+        const data = document.getElementById('data').value;
+        const hora = document.getElementById('hora').value;
+        const titulo = document.getElementById('titulo').value;
+        
+        if (titulo) {
+            adicionarTarefa(titulo, false);
+            agendarNotificacao(titulo, data, hora);
+            salvarTarefas();
+            modal.style.display = 'none';
+            document.getElementById('titulo').value = '';
+            // Se tiver inputs de data e hora, limpa também:
+            if(document.getElementById('data')) document.getElementById('data').value = '';
+            if(document.getElementById('hora')) document.getElementById('hora').value = '';
+        }
+    });
+}
+
+// --- 5. FÁBRICA DE TAREFAS ---
 function adicionarTarefa(texto, concluida = false) {
+    if (!listcontainer) return;
+    
     const li = document.createElement('li');
-    li.style.cssText = "background-color: #202020; color: #ffffff; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between;";
+    li.style.cssText = "background-color: #202020; color: #ffffff; padding: 15px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;";
     
     li.innerHTML = `
         <span class="texto-tarefa" style="${concluida ? 'text-decoration: line-through; color: #888;' : ''}">${texto}</span>
-        <div class="acoes">
-            <button class="btn-check">✅</button>
-            <button class="btn-edit">✏️</button>
-            <button class="btn-delete">🗑️</button>
+        <div class="acoes" style="display: flex; gap: 8px;">
+            <button class="btn-check" style="background: none; border: none; cursor: pointer; font-size: 16px;">✅</button>
+            <button class="btn-edit" style="background: none; border: none; cursor: pointer; font-size: 16px;">✏️</button>
+            <button class="btn-delete" style="background: none; border: none; cursor: pointer; font-size: 16px;">🗑️</button>
         </div>
     `;
 
@@ -81,17 +99,15 @@ function adicionarTarefa(texto, concluida = false) {
     li.querySelector('.btn-edit').addEventListener('click', () => {
         const span = li.querySelector('.texto-tarefa');
         const novoTexto = prompt("Edite sua tarefa:", span.innerText);
-        if (novoTexto) { 
+        if (novoTexto && novoTexto.trim() !== "") { 
             span.innerText = novoTexto; 
             salvarTarefas(); 
         }
     });
 
-   
+    // 3. Botão Check / Concluir
     li.querySelector('.btn-check').addEventListener('click', () => {
         const span = li.querySelector('.texto-tarefa');
-        
-        // Verifica se já está riscado
         if (span.style.textDecoration === "line-through") {
             span.style.textDecoration = "none";
             span.style.color = "#fff";
@@ -99,13 +115,13 @@ function adicionarTarefa(texto, concluida = false) {
             span.style.textDecoration = "line-through";
             span.style.color = "#888";
         }
-        
         salvarTarefas(); 
     });
 
     listcontainer.appendChild(li);
 }
 
+// --- 6. AGENDAMENTO DE NOTIFICAÇÕES ---
 function agendarNotificacao(titulo, data, hora) {
     if (!data || !hora) return;
 
@@ -115,16 +131,13 @@ function agendarNotificacao(titulo, data, hora) {
 
     if (diferenca > 0) {
         setTimeout(() => {
-            // Verifica se temos permissão antes de enviar
             if (Notification.permission === 'granted') {
                 new Notification("Lembrete de Tarefa!", {
-                    body: titulo,
-                   
+                    body: titulo
                 });
             } else {
-                alert(`Hora da tarefa: ${titulo}`); // Backup caso o usuário negue
+                alert(`Hora da tarefa: ${titulo}`);
             }
         }, diferenca);
     }
-}} 
-
+}
