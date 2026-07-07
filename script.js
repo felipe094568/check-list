@@ -1,3 +1,8 @@
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js') // Use './sw.js' para funcionar relativo na raiz do GitHub Pages
+    .then(reg => console.log('Service Worker registrado com sucesso!', reg))
+    .catch(err => console.log('Erro ao registrar o Service Worker:', err));
+}
 // --- 1. PERMISSÃO E CARREGAMENTO INICIAL ---
 window.onload = () => {
     if (Notification.permission !== 'granted') {
