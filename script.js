@@ -34,6 +34,8 @@ window.onload = () => {
 
 // --- 2. CONTROLE DO MODAL ---
 btnAdd.addEventListener('click', () => modal.style.display = 'flex');
+btnAdd.addEventListener('touchend', (e) => { e.preventDefault(); modal.style.display = 'flex';
+    });
 btnCancelar.addEventListener('click', () => modal.style.display = 'none');
 
 btnSalvar.addEventListener('click', () => {
