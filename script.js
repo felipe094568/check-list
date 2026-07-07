@@ -5,7 +5,7 @@ window.onload = () => {
 
 const listcontainer = document.getElementById("list-container");
 const modal = document.getElementById("modal-fundo");
-const btnAdd = document.getElementById('add-list-btn');
+const btnAdd = document.getElementById('btnAdd');
 const btnSalvar = document.getElementById('btn-adicionar');
 const btnCancelar = document.getElementById('btn-cancelar');
 
