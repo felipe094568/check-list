@@ -33,10 +33,10 @@ window.onload = () => {
 };
 
 // --- 2. CONTROLE DO MODAL ---
-btnAdd.addEventListener('click', (e) => {
+if (btnAdd){btnAdd.addEventListener('click', (e) => {
         e.preventDefault();
         modal.style.display = 'flex';
-    });
+})};
     
     btnAdd.addEventListener('touchend', (e) => {
         e.preventDefault();
