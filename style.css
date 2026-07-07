@@ -1,0 +1,210 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+   --fundo-pagina: #111111;    
+    --card-fundo: #ffffff;     
+    --preto-puro: #000000;
+    --texto-primario: #000000;
+    --cinza-suave: #eeeeee;  
+    --cinza-texto: #cccccc; 
+    --preto-botão: #222222;
+    --border-radius-card: 30px;
+}
+
+
+body {
+    background-color: var(--fundo-pagina);
+    color: rgb(255, 255, 255);
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 90vh;
+}
+
+header{
+    background-color: var(--fundo-pagina);
+    color: white;
+    width: 100%;
+    border-radius: 10px;
+    padding:3px 40px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  
+   box-sizing: border-box;
+}
+
+header h1{
+    font-size: 36px;
+    margin-bottom: 5px;
+}
+
+header p{
+    font-size: 18px;
+    color: var(--cinza-texto);
+}
+ 
+
+.app-container {
+    background-color: var(--card-fundo);
+    padding: 25px;
+    margin-top: 130px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    min-height: 80vh;
+    border-radius: 30px;
+    width: 100%;
+    border-radius: var(--border-radius-card);
+    box-sizing: border-box;
+    padding-bottom: 80px;
+   
+}
+
+
+#add-list-btn{
+    background-color: var(--preto-botão);
+    color: var(--cor-texto);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    position: fixed;
+    cursor: pointer;
+    margin-bottom: 20px;
+    bottom: 120px;
+    right: 50px;
+    z-index: 1000;
+}
+
+.tabs{
+    display: flex;
+    background-color: #cecbcb86;
+    padding: 5px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.tab-btn{
+   padding: 20px 365px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background-color: #ddd;
+    transition: 0.3s;
+    opacity: 0.6;
+    transition: 0.3s
+}
+
+.tab-btn.active{
+   background-color: #333 !important;
+    color: #fff !important;
+    opacity: 1;
+    border-bottom: 2px solid #000;
+}
+
+#list-container li {
+    background-color: var(--cinza-suave); /* Fundo cinza suave */
+    color: var(--texto-primario);
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 15px; /* Bordas arredondadas como na imagem */
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.concluida{
+    text-decoration: line-through;
+    color:#aaa;
+}
+
+.acoes{
+    display: flex;
+    gap: 10px;
+}
+
+/* Apenas para testar se os botões aparecem */
+.acoes button {
+    display: inline-block !important;
+    background-color: #ddd !important; /* Fundo cinza claro para destacar */
+    border: 1px solid #000;
+    margin: 2px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 400px; /* Mesma largura do seu container */
+    height: 60px;
+    background-color: var(--fundo-pagina);
+    border-top: 1px solid #333;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 1000;
+    border-radius: 10px 10px 0 0;
+    top: 855px;
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    color: var(--cinza-texto);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.nav-item:hover {
+    color: rgb(231, 0, 0);
+}
+
+/* --- RESPONSIVIDADE PARA CELULARES --- */
+@media (max-width: 600px) {
+    /* 1. Ajusta o container principal para preencher bem a tela do celular */
+    .app-container {
+        width: 100% !important;
+        padding: 10px !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+    }
+
+    /* 2. Reduz o tamanho de fontes e margens no topo */
+    header h1 {
+        font-size: 1.5rem !important;
+    }
+
+    header p {
+        font-size: 0.85rem !important;
+    }
+
+    /* 3. Faz o modal ocupar um espaço mais confortável em telas pequenas */
+    .modal-conteudo {
+        width: 90% !important;
+        max-width: 320px !important;
+        padding: 20px !important;
+    }
+
+    /* 4. Garante que os botões de ação da tarefa não fiquem apertados demais */
+    li {
+        padding: 10px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+#list-container {
+    padding-bottom: 70px; /* Cria um respiro para o último item não ficar debaixo da barra */
+}
