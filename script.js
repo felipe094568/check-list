@@ -1,11 +1,9 @@
-// --- 1. PERMISSÃO E CARREGAMENTO INICIAL (Único window.onload) ---
+// --- 1. PERMISSÃO E CARREGAMENTO INICIAL ---
 window.onload = () => {
-    // Pede permissão de notificação se não foi concedida
     if (Notification.permission !== 'granted') {
         Notification.requestPermission();
     }
 
-    // Carrega as tarefas salvas do localStorage
     const tarefasSalvas = JSON.parse(localStorage.getItem('minhasTarefas'));
     if (tarefasSalvas) {
         tarefasSalvas.forEach(tarefa => {
@@ -17,8 +15,7 @@ window.onload = () => {
 // --- 2. SELEÇÃO DE ELEMENTOS ---
 const listcontainer = document.getElementById("list-container");
 const modal = document.getElementById("modal-fundo");
-// Ajustado para 'add-list-btn' (confirme se no seu index.html o ID é esse)
-const btnAdd = document.getElementById('add-list-btn') || document.getElementById('btnAdd');
+const btnAdd = document.getElementById('btnAdd');
 const btnSalvar = document.getElementById('btn-salvar');
 const btnCancelar = document.getElementById('btn-cancelar');
 
@@ -55,20 +52,23 @@ if (btnCancelar && modal) {
 }
 
 if (btnSalvar && modal) {
-    btnSalvar.addEventListener('click', () => {
+    btnSalvar.addEventListener('click', (e) => {
+        e.preventDefault();
         const data = document.getElementById('data').value;
         const hora = document.getElementById('hora').value;
-        const titulo = document.getElementById('titulo').value;
+        const titulo = document.getElementById('titulo').value.trim();
         
-        if (titulo) {
+        if (titulo !== "") {
             adicionarTarefa(titulo, false);
             agendarNotificacao(titulo, data, hora);
             salvarTarefas();
+            
             modal.style.display = 'none';
             document.getElementById('titulo').value = '';
-            // Se tiver inputs de data e hora, limpa também:
             if(document.getElementById('data')) document.getElementById('data').value = '';
             if(document.getElementById('hora')) document.getElementById('hora').value = '';
+        } else {
+            alert("Digite um título para a tarefa!");
         }
     });
 }
@@ -89,13 +89,11 @@ function adicionarTarefa(texto, concluida = false) {
         </div>
     `;
 
-    // 1. Botão Excluir
     li.querySelector('.btn-delete').addEventListener('click', () => { 
         li.remove(); 
         salvarTarefas(); 
     });
 
-    // 2. Botão Editar
     li.querySelector('.btn-edit').addEventListener('click', () => {
         const span = li.querySelector('.texto-tarefa');
         const novoTexto = prompt("Edite sua tarefa:", span.innerText);
@@ -105,7 +103,6 @@ function adicionarTarefa(texto, concluida = false) {
         }
     });
 
-    // 3. Botão Check / Concluir
     li.querySelector('.btn-check').addEventListener('click', () => {
         const span = li.querySelector('.texto-tarefa');
         if (span.style.textDecoration === "line-through") {
@@ -132,9 +129,7 @@ function agendarNotificacao(titulo, data, hora) {
     if (diferenca > 0) {
         setTimeout(() => {
             if (Notification.permission === 'granted') {
-                new Notification("Lembrete de Tarefa!", {
-                    body: titulo
-                });
+                new Notification("Lembrete de Tarefa!", { body: titulo });
             } else {
                 alert(`Hora da tarefa: ${titulo}`);
             }
