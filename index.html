@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="Pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="icon" href="IMG/images.png" type="image/png">
+    
+    <title>checklist</title>
+</head>
+<body>
+<div class="app-container">
+
+    <header>
+        
+     <div class="header-top" style="display: flex; align-items: center; gap: 10px;">
+        <img src="IMG/images.png" alt="Checklist Image" style="width: 40px; height: 40px; margin: 10px; border-radius: 50%;"> 
+        <h1>Checklist</h1>
+    </div>
+        <p style="padding: 20px; margin: 0;">Organize suas tarefas e mantenha tudo em dia.</p>
+       
+
+        <div class="perfil-container" style="background: #222; padding: 10px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-size: 14px; color: #ccc;">Perfil atual:</span>
+    <select id="seletor-perfil" onchange="mudarPerfil(this.value)" style="padding: 6px 12px; border-radius: 8px; background: #333; color: #fff; border: 1px solid #555; cursor: pointer;">
+        <option value="admin">Administrador</option>
+        <option value="usuario">Usuário (Marcar Tarefas)</option>
+    </select>
+</div>
+    </header>
+
+    
+
+    
+     <div class="tabs-container">
+       <button class="tab-btn" onclick="filtrarTarefas('all')">Minha lista de tarefas</button>  
+        </div>
+
+    <ul id="list-container"></ul>
+    
+<button id="btnAdd" >+</button>
+
+</div>
+
+ <nav class="bottom-nav">
+<nav class="bottom-nav">
+    <button class="nav-item" onclick="alert('Página inicial')"><span>🏠</span><small>Lista</small></button>
+
+    <button class="nav-item" onclick="alert('Hoje: ' + new Date().toLocaleDateString())"><span>📅</span><small>Hoje</small></button>
+
+    <button class="nav-item" onclick="alert('Estatísticas: Você tem ' + document.querySelectorAll('li').length + ' tarefas.')"><span>📊</span><small>Estatísticas</small></button>
+
+    <button class="nav-item" onclick="alert('Configurações do App')"><span>⚙️</span><small>Ajustes</small></button>
+
+</nav>>
+ </nav>
+
+ <div id="modal-fundo" class="modal-fundo" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 2000;">
+    
+    <div class="modal-conteudo" style="background: white; padding: 25px; border-radius: 20px; width: 80%; max-width: 300px; display: flex; flex-direction: column; gap: 15px;">
+        
+        <h2 style=" color: #000000; border: none; padding: 10px; border-radius: 10px;">Adicionar Tarefa</h2>
+        
+        <input type="text" id="titulo" placeholder="Digite sua tarefa..." style="padding: 12px; border: 2px solid #000000; border-radius: 10px;">
+        <input type="date" id="data" style="padding: 12px; border: 2px solid #050202; border-radius: 10px;">
+        <input type="time" id="hora" style="padding: 12px; border: 2px solid #000000; border-radius: 10px;">
+        
+        <button id="btn-salvar" style="background-color: #000000; color: #ffffff; border: none; padding: 12px; border-radius: 10px;">Salvar</button>
+        <button id="btn-cancelar" style="background-color: #000000; color: #ffffff; border: none; padding: 12px; border-radius: 10px;">Cancelar</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script src="sw.js"></script>
+</body>
+</html>
