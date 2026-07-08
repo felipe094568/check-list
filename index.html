@@ -19,6 +19,14 @@
         <h1>Checklist</h1>
     </div>
         <p>Organize suas tarefas e mantenha tudo em dia.</p>
+
+         <div class="perfil-container" style="background: #222; padding: 10px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-size: 14px; color: #ccc;">Perfil atual:</span>
+    <select id="seletor-perfil" onchange="mudarPerfil(this.value)" style="padding: 6px 12px; border-radius: 8px; background: #333; color: #fff; border: 1px solid #555; cursor: pointer;">
+        <option value="admin">Administrador</option>
+        <option value="usuario">Usuário (Marcar Tarefas)</option>
+    </select>
+</div>
        
       
     </header>
